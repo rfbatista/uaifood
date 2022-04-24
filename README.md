@@ -1,1 +1,35 @@
 # uaifood
+
+- montar OpenAPI
+- montar docker dev
+- montar docker prod
+- montar docker-compose
+- montar git action
+- Infra
+  - Logger
+  - Repositorio
+  - Server
+  - Controller Loads
+  - Middleware
+    - error handling
+    - cors
+    - request logging
+    - adapter output handler
+- Presentation
+  - controllers
+    - restaurant
+    - item
+  - input
+    - restaurant
+    - item
+  - errors
+- Core
+  - Application
+    - use cases
+      - create restaurant
+      - list restaurant
+      - create item
+      - update item
+  - Domain
+    - Restaurant
+    - Item
