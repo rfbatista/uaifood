@@ -42,6 +42,29 @@ npm i
 npm run dev
 ```
 
+# Rotas
+POST `/api/v1/restaurant`
+```
+{
+  "name": "Japa",
+  "culinary": "Japonesa",
+  "city": "Piracicaba",
+  "local": {
+    "lat": 10.000023,
+    "long": 22.4432342
+  }
+}
+```
+POST `/api/v1/item`
+```
+{
+  "restaurantId": "ab417b62-5354-458e-9228-9694b2c5101f",
+  "name": "Lanche",
+  "price": 29.00
+}
+```
+GET `/api/v1/health-check`
+
 ## Estrutura
 
 ```bash
