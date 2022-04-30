@@ -18,7 +18,7 @@ const updateItemHandler = handler(({ updateItemUseCase }) => async (req, res, ne
 const makeItemController = ({ apiRouter }: { apiRouter: Router }) => {
   const router = Router();
   router.post('/v1/item', validateCreateItem(), createItemHandler);
-  router.get('/v1/item', validateUpdateItem(), updateItemHandler);
+  router.put('/v1/item', validateUpdateItem(), updateItemHandler);
   apiRouter.use(router);
 };
 

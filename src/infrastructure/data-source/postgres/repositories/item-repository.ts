@@ -9,19 +9,19 @@ const makeItemRepository = ({ database }: { database: DataSource }): ItemReposit
     const repo = database.getRepository(ItemSchema);
     const schema = itemToSchema(entity);
     const savedSchema = await repo.save(schema);
-    return createSuccessResult(itemToDomain(savedSchema));
+    return createSuccessResult(itemToDomain(savedSchema).data);
   },
   async update(entity: Item) {
     const repo = database.getRepository(ItemSchema);
     const schema = itemToSchema(entity);
     const savedSchema = await repo.save(schema);
-    return createSuccessResult(itemToDomain(savedSchema));
+    return createSuccessResult(itemToDomain(savedSchema).data);
   },
   async findById(id: string) {
     const repo = database.getRepository(ItemSchema);
     const schema = await repo.findOne({ where: { id } });
     if (!schema) return createErrorResult(new Error());
-    return createSuccessResult(itemToDomain(schema));
+    return createSuccessResult(itemToDomain(schema).data);
   },
 });
 

@@ -67,7 +67,7 @@ const itemToSchema = makeSchemaFromDomain<Item, ItemSchema>((domain: Item, schem
 });
 
 const itemToDomain = (schema: ItemSchema) => {
-  createItem({
+  return createItem({
     id: schema.id,
     name: schema.name,
     restaurantId: schema.restaurantId,
