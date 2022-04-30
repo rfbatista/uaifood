@@ -1,0 +1,17 @@
+FROM node:14.17.6
+
+EXPOSE 3100
+
+RUN mkdir -p /app
+RUN chown node /app
+USER node
+
+WORKDIR /app
+
+COPY ["package.json", "package-lock.json*", "./"]
+
+RUN npm install
+
+COPY . .
+
+CMD ["npm", "run", "debug"]

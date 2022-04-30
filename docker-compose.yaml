@@ -4,23 +4,21 @@ networks:
   uaifood-network:
 
 volumes:
-  uaifood_db_data:
-    name: uaifood_db_data
+  uaifood_postgres_data:
+    name: uaifood_postgres_data
 services:
-  uaifood-mongodb:
-    container_name: uaifood-mongodb
-    image: mongo:4.2
+  uaifood_postgres:
+    container_name: uaifood_postgres
+    image: postgres:11-alpine
     restart: always
-    ports:
-      - $MONGODB_PORT:27017
     env_file: .env
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=$MONGODB_USER
-      - MONGO_INITDB_ROOT_PASSWORD=$MONGODB_PASSWORD
-      - MONGO_INITDB_DATABASE=$MONGODB_NAME
-    networks:
-      - uaifood-network
+    ports:
+      - $POSTGRES_PORT:5432
     volumes:
-      - uaifood_db_data:/data/db
-      - ./scripts/mongo/001_users.sh:/docker-entrypoint-initdb.d/001_users.sh:ro
+      - uaifood_postgres_data:/var/lib/postgresql/data
+      - ./scripts/postgres/init-user-db.sh:/docker-entrypoint-initdb.d/init-user-db.sh:ro
+    environment:
+      POSTGRES_USER: $POSTGRES_USER
+      POSTGRES_PASSWORD: $POSTGRES_PASSWORD
+      POSTGRES_DB: $POSTGRES_NAME
 
