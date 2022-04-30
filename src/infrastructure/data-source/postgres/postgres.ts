@@ -11,7 +11,7 @@ const postgres = new DataSource({
   password: config.dataSource.postgres.password,
   username: config.dataSource.postgres.user,
   synchronize: false,
-  logging: true,
+  logging: false,
   entities: [RestaurantSchema, ItemSchema],
   migrations: ['migration/**/*.ts'],
 });
