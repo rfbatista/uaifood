@@ -2,20 +2,20 @@ enum CurrencyEnum {
   BRL = 'brl',
 }
 
-type MoneyType = Readonly<{
+type MoneyDTO = Readonly<{
   amount: number;
   currency: CurrencyEnum;
 }>;
 
 interface Money {
-	readonly amount: number
-	readonly currency: CurrencyEnum
+  readonly amount: number;
+  readonly currency: CurrencyEnum;
 }
 
-const createMoney = (amount: number, currency: CurrencyEnum): Money =>
+const createMoney = (amount: number, currency?: CurrencyEnum): Money =>
   Object.freeze({
     amount,
-    currency,
+    currency: currency || CurrencyEnum.BRL,
   });
 
-export { MoneyType, Money, CurrencyEnum, createMoney };
+export { MoneyDTO as MoneyType, Money, CurrencyEnum, createMoney };
