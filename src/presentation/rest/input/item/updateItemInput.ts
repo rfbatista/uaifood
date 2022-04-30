@@ -5,7 +5,7 @@ import { body } from 'express-validator';
 const validateUpdateItem = () =>
   validateRoute([
     body('id').isUUID(),
-    body('restaunrantId').isUUID(),
+    body('restaunrantId').isUUID().optional(),
     body('name').isString(),
     body('price').isNumeric(),
   ]);
