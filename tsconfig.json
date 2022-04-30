@@ -1,22 +1,26 @@
 {
-  "$schema": "https://json.schemastore.org/tsconfig",
-	"compilerOptions": {
-    "target": "ES2021",
-    "lib": ["ES2021"],
+  "compilerOptions": {
+    "moduleResolution": "node",
     "module": "commonjs",
     "resolveJsonModule": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
     "sourceMap": true,
     "outDir": "dist",
+    "target": "ES2020",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true,
-		"baseUrl": ".",
-		"paths": {
+    "noImplicitAny": false,
+    "baseUrl": ".",
+    "paths": {
       "@core/*": ["src/core/*"],
       "@adapters/*": ["src/adapters/*"],
-      "@infrastructure/*": ["src/infrastructure/*"]
-    }
-	},
-  "include": ["src/**/*"]
+      "@infrastructure/*": ["src/infrastructure/*"],
+      "@di/*": ["src/di/*"],
+      "@presentation/*": ["src/presentation/*"]
+    },
+  },
+  "include": ["src/**/*", "custom.d.ts"]
 }
