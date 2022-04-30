@@ -1,15 +1,11 @@
-enum CulinaryTypeEnum {
-  VEGAN = 'vegan',
-}
-
 type Culinary = {
-  type: CulinaryTypeEnum;
+  type: string;
 };
 
-const createCulinary = (type: CulinaryTypeEnum): Culinary => {
+const createCulinary = (type: string): Culinary => {
   return {
     type,
   };
 };
 
-export { CulinaryTypeEnum, Culinary, createCulinary };
+export { Culinary, createCulinary };
