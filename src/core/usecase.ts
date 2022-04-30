@@ -1,7 +1,5 @@
 import { ResultSuccess, ResultError } from '@core/result';
 
-interface UseCase<Input, Output> {
-  execute(data: Input): Promise<ResultSuccess<Output> | ResultError>;
-}
+type UseCase<Input, Output> = (data: Input) => Promise<ResultSuccess<Output> | ResultError>;
 
 export { UseCase };
