@@ -3,8 +3,8 @@ import { Router } from 'express';
 import { StatusCodes } from 'http-status-codes';
 import { DataSource } from 'typeorm';
 
-const getHealthHandler = handler(({ datasource }: { datasource: DataSource }) => async (req, res) => {
-  if (datasource.isInitialized) res.status(StatusCodes.OK).json({ message: 'Uaifood is running...' });
+const getHealthHandler = handler(({ database }: { database: DataSource }) => async (req, res) => {
+  if (database.isInitialized) res.status(StatusCodes.OK).json({ message: 'Uaifood is running...' });
   else res.status(StatusCodes.OK).json({ message: 'Server is down :(' });
 });
 
