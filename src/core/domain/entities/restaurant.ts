@@ -1,37 +1,40 @@
 import { Entity, EntityType, makeEntity } from '../entity';
 import { createSuccessResult, createErrorResult, ResultSuccess, ResultError } from '@core/result';
 import { Culinary } from '@core/domain/value-object/culinary';
+import { Address, AddressDTO, createAddress } from '@core/domain/value-object/address';
 
-type RestaurantType = EntityType & {
+type RestaurantDTO = EntityType & {
   name?: string;
   culinary: Culinary;
-};
-
-type RestaurantDTO = RestaurantType & {
-  id: string;
-  createdAt?: Date;
+  address?: AddressDTO;
 };
 
 interface Restaurant extends Entity {
   name?: string;
-  toDTO: RestaurantDTO;
+  culinary: Culinary;
+  address?: Address;
+  toDTO(): RestaurantDTO;
 }
 
-const createRestaurant = makeEntity<RestaurantType, Restaurant>(
-  (entity: Entity, props: RestaurantType): ResultSuccess<Restaurant> | ResultError => {
+const createRestaurant = makeEntity<RestaurantDTO, Restaurant>(
+  (entity: Entity, props: RestaurantDTO): ResultSuccess<Restaurant> | ResultError => {
     if (!props?.culinary) return createErrorResult(new Error());
-    return createSuccessResult({
+    const restaurant = {
       ...entity,
       name: props.name,
-      get toDTO() {
+      culinary: props.culinary,
+      address: createAddress({ city: props.address?.city, local: props.address?.local }),
+      toDTO: (): RestaurantDTO => {
         return {
           id: entity.id,
           name: props.name,
           culinary: props.culinary,
-          createdAt: entity.createdAt
+          address: props.address,
+          createdAt: entity.createdAt,
         };
       },
-    });
+    };
+    return createSuccessResult(restaurant);
   },
 );
 
