@@ -52,7 +52,7 @@ npm run dev
 │   |   |   ├── /schemas/               
 │   |   |   ├── /postgres/
 │   |   |   |   ├── /repositories/
-│   |   ├── /error/                    **** 
+│   |   ├── /error/                    
 │   |   ├── /logger/                    
 │   |   ├── /middlewares/  
 │   ├── /presentation/                     
