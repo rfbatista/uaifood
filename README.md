@@ -74,8 +74,7 @@ npm run dev
 │   |   ├── /container.ts                 
 │   /index.ts
 ```
-
-Vou escrever um pouco sobre como estruturei a aplicação e os poquês de te-la estruturado de certa forma.
+Infelizmente não tive tempo hábil pra descrever melhor a aplicação, mas segue alguns apontamentos.
 
 ### Money
 `Money` E uma propriedade recorrente, 
