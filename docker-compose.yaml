@@ -21,4 +21,28 @@ services:
       POSTGRES_USER: $POSTGRES_USER
       POSTGRES_PASSWORD: $POSTGRES_PASSWORD
       POSTGRES_DB: $POSTGRES_NAME
-
+    networks:
+      - uaifood-network
+  uaifood_api:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    container_name: uaifood-api
+    env_file: .env
+    ports:
+      - $PORT:$PORT
+      - 9229:9229
+    environment:
+      - PORT=$PORT
+      - POSTGRES_NAME=$POSTGRES_NAME
+      - POSTGRES_PASSWORD=$POSTGRES_PASSWORD
+      - POSTGRES_USER=$POSTGRES_USER
+      - POSTGRES_HOST=uaifood_postgres
+      - POSTGRES_PORT=5432
+      - NODE_ENV=local
+    volumes:
+      - ./:/app
+    networks:
+      - uaifood-network
+    depends_on:
+      - uaifood_postgres
