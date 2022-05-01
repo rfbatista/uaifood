@@ -16,7 +16,7 @@ import { RestaurantSchema } from '@infrastructure/data-source/schemas/restaurant
 
 type ItemSchemaType = Schema & {
   name: string;
-  restaurantId: string;
+  restaurant_id: string;
   price: {
     amount: number;
     currency: string;
@@ -27,7 +27,7 @@ type ItemSchemaType = Schema & {
 class ItemSchema implements ItemSchemaType {
   @PrimaryColumn({ type: 'uuid' })
   id: string;
-  @Column()
+  @Column({ nullable: true })
   name: string;
   @Column('json')
   price: {
@@ -36,7 +36,7 @@ class ItemSchema implements ItemSchemaType {
   };
   @ManyToOne(() => RestaurantSchema, (item) => item.items)
   @JoinColumn({ name: 'restaurant_id' })
-  restaurantId: string;
+  restaurant_id: string;
   @CreateDateColumn({ name: 'created_at' })
   createdAt?: Date;
   @UpdateDateColumn({ name: 'updated_at' })
@@ -50,14 +50,14 @@ class ItemSchema implements ItemSchemaType {
     this.createdAt = props?.createdAt;
     this.updatedAt = props?.updatedAt;
     this.deletedAt = props?.deletedAt;
-    this.restaurantId = props?.restaurantId;
+    this.restaurant_id = props?.restaurant_id;
   }
 }
 
 const itemToSchema = makeSchemaFromDomain<Item, ItemSchema>((domain: Item, schema: Schema): ItemSchema => {
   return new ItemSchema({
     ...schema,
-    restaurantId: domain.restaurantId,
+    restaurant_id: domain.restaurantId,
     name: domain.name || '',
     price: {
       amount: domain.price.amount(),
@@ -70,7 +70,7 @@ const itemToDomain = (schema: ItemSchema) => {
   return createItem({
     id: schema.id,
     name: schema.name,
-    restaurantId: schema.restaurantId,
+    restaurantId: schema.restaurant_id,
     price: createPrice(schema.price.amount),
     createdAt: schema.createdAt,
     updatedAt: schema.updatedAt,

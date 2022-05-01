@@ -15,6 +15,7 @@ const mapUpdateItemInput = (req): updateItemtUseCaseInput => {
     id: req.body?.id,
     name: req.body?.name,
     price: req.body?.price,
+    restauranId: req.body?.restaurantId,
   };
 };
 

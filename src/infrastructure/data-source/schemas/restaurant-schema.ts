@@ -33,7 +33,7 @@ class RestaurantSchema implements RestaurantSchemaType {
   @Column()
   @Index({ fulltext: true })
   culinary: string;
-  @OneToMany(() => ItemSchema, (item) => item.restaurantId)
+  @OneToMany(() => ItemSchema, (item) => item.restaurant_id)
   items?: ItemSchema[];
   @Column({ type: 'json', nullable: true })
   local?: Point;

@@ -1,6 +1,6 @@
 import { ItemRepository } from '@core/ports';
 import { createSuccessResult, createErrorResult } from '@core/result';
-import { DataSource } from 'typeorm';
+import { DataSource, EntityManager } from 'typeorm';
 import { Item } from '@core/domain/entities/item';
 import { ItemSchema, itemToDomain, itemToSchema } from '@infrastructure/data-source/schemas/item-schema';
 
@@ -18,10 +18,14 @@ const makeItemRepository = ({ database }: { database: DataSource }): ItemReposit
     return createSuccessResult(itemToDomain(savedSchema).data);
   },
   async findById(id: string) {
-    const repo = database.getRepository(ItemSchema);
-    const schema = await repo.findOne({ where: { id } });
-    if (!schema) return createErrorResult(new Error());
-    return createSuccessResult(itemToDomain(schema).data);
+    const manager = new EntityManager(database);
+    const schema = await manager.query(`
+      SELECT i.*
+      FROM item i
+      WHERE i.id = '${id}'
+    `);
+    if (!schema[0]) return createErrorResult(new Error());
+    return createSuccessResult(itemToDomain(schema[0]).data);
   },
 });
 

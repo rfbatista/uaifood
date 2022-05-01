@@ -8,6 +8,7 @@ type Input = {
   id: string;
   name?: string;
   price?: number;
+  restauranId: string;
 };
 
 type Output = RestaurantDTO;
@@ -19,8 +20,9 @@ function makeUpdateItemUseCase({ itemRepository }: { itemRepository: ItemReposit
     const item = (itemOrError as ResultSuccess<Item>).data;
     if (input.name) item.name = input.name;
     if (input.price) item.price.updateAmount(input.price);
-    await itemRepository.update(item);
-    return createSuccessResult(item?.toDTO);
+    const itemUpdated = await itemRepository.update(item);
+    if (itemUpdated.isError) return createErrorResult(new Error('Cant update item'));
+    return createSuccessResult((itemUpdated as ResultSuccess<Item>).data.toDTO);
   };
   return execute;
 }
