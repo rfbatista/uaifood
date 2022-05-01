@@ -1,6 +1,7 @@
 import { envNumber, envString } from '@infrastructure/config/environment';
 
 const config = {
+  env: envString('NODE_ENV'),
   http: {
     port: envNumber('PORT', 3000),
     host: envString('HOST', 'localhost'),

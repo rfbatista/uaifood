@@ -10,7 +10,7 @@ const postgres = new DataSource({
   database: config.dataSource.postgres.database,
   password: config.dataSource.postgres.password,
   username: config.dataSource.postgres.user,
-  synchronize: true,
+  synchronize: config.env === 'local' ? true : false,
   logging: false,
   entities: [RestaurantSchema, ItemSchema],
   migrations: ['migration/**/*.ts'],
