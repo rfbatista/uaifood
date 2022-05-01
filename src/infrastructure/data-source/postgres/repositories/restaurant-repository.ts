@@ -6,7 +6,7 @@ import {
 } from '@infrastructure/data-source/schemas/restaurant-schema';
 import { RestaurantRepository } from '@core/ports';
 import { createSuccessResult } from '@core/result';
-import { DataSource } from 'typeorm';
+import { DataSource, EntityManager } from 'typeorm';
 
 const makeRestaurantRepository = ({ database }: { database: DataSource }): RestaurantRepository => ({
   async create(entity: Restaurant) {
@@ -16,20 +16,27 @@ const makeRestaurantRepository = ({ database }: { database: DataSource }): Resta
     return createSuccessResult(restaurantToDomain(savedSchema));
   },
   async find({ city, distance, culinary, item }) {
-    const repo = database.getRepository(RestaurantSchema);
-    const query = repo
-      .createQueryBuilder('restaurant')
-      .leftJoinAndMapMany('restaurant.items', 'item', 'item.restaurantId = restaurant.id');
-    if (culinary)
-      query.orWhere("to_tsvector('simple', restaurant.culinary) @@ to_tsquery(:query)", {
-        query: `${culinary}:*`,
-      });
-    if (city)
-      query.orWhere("to_tsvector('simple', restaurant.city) @@ to_tsquery(:query)", {
-        query: `${city}:*`,
-      });
-    const schemas = await query.getMany();
     const entities: Restaurant[] = [];
+    const manager = new EntityManager(database);
+    const schemas = await manager.query(`
+      SELECT r.*
+      FROM restaurant r
+      WHERE (r."deleted_at" IS NULL)
+      ${city ? `AND to_tsvector('portuguese', r.city) @@ to_tsquery('${city}:*')` : ''}
+      ${
+        distance
+          ? `AND ST_DistanceSphere(ST_GeomFromGeoJSON(local), 'SRID=4326;POINT(${distance.long} ${
+              distance.lat
+            })'::geometry) <= ${distance.radius * 1000}`
+          : ''
+      }
+      ${culinary ? `AND to_tsvector('portuguese', r.culinary) @@ to_tsquery('${culinary}:*')` : ''}
+      ${
+        item
+          ? `AND r.id IN (SELECT i.restaurant_id FROM item i WHERE to_tsvector('portuguese', i.name) @@ to_tsquery('${item}:*') )`
+          : ''
+      }
+    `);
     for (const schema of schemas) {
       entities.push(restaurantToDomain(schema));
     }
