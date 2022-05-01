@@ -1,0 +1,171 @@
+{
+	"info": {
+		"_postman_id": "346d9a81-ec61-4db4-b032-e3dffd2d3bb5",
+		"name": "UAIFOOD",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create Restaurant",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"name\": \"Italia\",\n  \"culinary\": \"Italiana\",\n  \"city\": \"Santa Barbara\",\n  \"local\": {\n    \"lat\": 10.000023,\n    \"long\": 22.4432342\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/restaurant",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"restaurant"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Item",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"restaurantId\": \"ab417b62-5354-458e-9228-9694b2c5101f\",\n  \"name\": \"Lanche\",\n  \"price\": 29.00\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/item",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"item"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Atualizar item",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"id\": \"ac4bdd42-094d-47bb-a08d-8d087a34994a\",\n  \"name\": \"Hamburguer\",\n  \"price\": 32.3\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/v1/item",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"item"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Restaurant",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/restaurant?city=Pir&culinary=j",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"restaurant"
+					],
+					"query": [
+						{
+							"key": "city",
+							"value": "Pir"
+						},
+						{
+							"key": "culinary",
+							"value": "j"
+						},
+						{
+							"key": "distancelat",
+							"value": "11.0000",
+							"disabled": true
+						},
+						{
+							"key": "distancelong",
+							"value": "22.4432342",
+							"disabled": true
+						},
+						{
+							"key": "distanceradius",
+							"value": "100",
+							"disabled": true
+						},
+						{
+							"key": "item",
+							"value": "l",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Health Check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/v1/health-check",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"v1",
+						"health-check"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
