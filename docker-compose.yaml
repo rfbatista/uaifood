@@ -9,7 +9,7 @@ volumes:
 services:
   uaifood_postgres:
     container_name: uaifood_postgres
-    image: postgres:11-alpine
+    image: postgis/postgis
     restart: always
     env_file: .env
     ports:
