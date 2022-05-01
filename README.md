@@ -1,26 +1,29 @@
 # uaifood
+A blazing fast uaifood api.
 
 # Roadmap
-✅ Salvar restaurantes
+- ✅ Salvar restaurantes
 
-✅ Salvar items
+- ✅ Salvar items
 
-➖ Listar restaurantes
+- ✅ Listar restaurantes
 
-  ✅ Cidade
+  -  ✅ Cidade
 
-  ✅ Prato
+  -  ✅ Prato
 
-  ❌ Tipo de cozinha
+  -  ✅ Tipo de cozinha
 
-  ❌ Distância
+  -  ✅ Distância
 
-❌ Atualizar Item
+- ✅ Atualizar Item
 
 
 # Variaveis de ambiente
 
-Para executar o projeto voce precida adicionar as seguintes variaveis em seu `.env`
+Para executar o projeto voce precisa adicionar as seguintes variaveis em seu `.env`
+
+`NODE_ENV`
 
 `POSTGRES_NAME`
 
@@ -32,38 +35,56 @@ Para executar o projeto voce precida adicionar as seguintes variaveis em seu `.e
 
 `POSTGRES_PORT`
 
-#  Run in docker
+#  Executar aplicação
 
 `make start` ou `docker-compose up --build`
 
-# Rodando na sua máquina
+# Rotas
+
+GET Buscar restauntante `/api/v1/restaurant`
 ```
-npm i
-npm run dev
+curl --location --request GET 'http://localhost:3000/api/v1/restaurant?city=Pir&culinary=j&distancelat=11.000023&distancelong=22.4432342&distanceradius=100'
 ```
 
-# Rotas
-POST `/api/v1/restaurant`
+POST Criar restaurante  `/api/v1/restaurant`
 ```
-{
-  "name": "Japa",
-  "culinary": "Japonesa",
-  "city": "Piracicaba",
+curl --location --request POST 'http://localhost:3000/api/v1/restaurant' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "name": "Italia",
+  "culinary": "Italiana",
+  "city": "Santa Barbara",
   "local": {
     "lat": 10.000023,
     "long": 22.4432342
   }
-}
+}'
 ```
-POST `/api/v1/item`
+POST Criar item `/api/v1/item`
 ```
-{
+curl --location --request POST 'http://localhost:3000/api/v1/item' \
+--header 'Content-Type: application/json' \
+--data-raw '{
   "restaurantId": "ab417b62-5354-458e-9228-9694b2c5101f",
   "name": "Lanche",
   "price": 29.00
-}
+}'
 ```
+PUT Atualizar item `api/v1/item`
+```
+curl --location --request PUT 'http://localhost:3000/api/v1/item' \
+--header 'Content-Type: application/json' \
+--data-raw '{
+  "id": "ac4bdd42-094d-47bb-a08d-8d087a34994a",
+  "name": "Hamburguer",
+  "price": 32.3
+}'
+```
+
 GET `/api/v1/health-check`
+```
+curl --location --request GET 'http://localhost:3000/api/v1/health-check'`
+```
 
 ## Estrutura
 
@@ -80,9 +101,12 @@ GET `/api/v1/health-check`
 │   |   ├── /middlewares/  
 │   ├── /presentation/                     
 │   |   |   ├── /controllers/
-│   |   |   |   ├── /healt-controller/           
-│   |   |   |   ├── /restaurant-controller/                
-│   |   |   |   ├── /item-controller/
+│   |   |   |   ├── /health-controller.ts           
+│   |   |   |   ├── /restaurant-controller.ts                
+│   |   |   |   ├── /item-controller.ts
+│   |   |   ├── /input/
+│   |   |   |   ├── /item/
+│   |   |   |   ├── /restaurant/
 │   ├── /core/
 │   |   ├── /application/             
 │   |   |   ├── /usecases/        
@@ -97,16 +121,3 @@ GET `/api/v1/health-check`
 │   |   ├── /container.ts                 
 │   /index.ts
 ```
-Infelizmente não tive tempo hábil pra descrever melhor a aplicação, mas segue alguns apontamentos.
-
-### Money
-`Money` E uma propriedade recorrente, 
-### Price
-`Price` e importante para aplicacao e merece cuidado na sua gestao por isso decidi torna-la um value-object.
-
-### Culinary
-`Culinary` não contem regras de negocio mas devido a sua importancia na entidade `Restaurant` podem sugir necessidade particulares na sua implementação tratando como um value object ela fica aberta para expansão e fechada para modificações.  
-
-### UniqueIdentifier
-
-O ID e tratado como uma value object para aplicarmos estrategias diferentes para geração dos identificadores e também não expormos detalhes de implementação (ex.: id incrementados) para serviços externos.
