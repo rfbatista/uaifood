@@ -10,6 +10,7 @@ type MakeModuleCallback = {
   asFunction: typeof asFunction;
   asValue: typeof asValue;
   onReady: (fn: () => Promise<void>) => void;
+  onDisposing: (fn: () => Promise<void>) => void;
   logger: Logger;
   config: typeof appConfig;
 };
@@ -31,9 +32,14 @@ const { makeModule, bootstrap } = ((
   config: typeof appConfig,
 ): { makeModule: MakeModule; bootstrap: Bootstrap } => {
   const onReadyHook: (() => Promise<void>)[] = [];
+  const onDisposingHook: (() => Promise<void>)[] = [];
 
   const onReady = (fn: () => Promise<void>): void => {
     onReadyHook.push(fn);
+  };
+
+  const onDisposing = (fn: () => Promise<void>): void => {
+    onDisposingHook.push(fn);
   };
 
   const makeModule = (name: string, fn: (data: MakeModuleCallback) => Promise<void>): Module => {
@@ -41,6 +47,22 @@ const { makeModule, bootstrap } = ((
       name,
       fn,
     };
+  };
+
+  const stop = async () => {
+    const promises: Promise<unknown>[] = [];
+    for (const hook of onDisposingHook) promises.push(hook());
+    await Promise.all(promises);
+  };
+
+  const shutdown = (code) => async () => {
+    process.stdout.write('\n');
+    setTimeout(() => {
+      logger.error('Ok, my patience is over! #ragequit');
+      process.exit(code);
+    }, 10000).unref();
+    await stop();
+    process.exit(code);
   };
 
   const bootstrap: Bootstrap = async (modules: Module[]): Promise<void> => {
@@ -53,6 +75,7 @@ const { makeModule, bootstrap } = ((
           asFunction,
           asValue,
           onReady,
+          onDisposing,
           logger,
           config,
         });
@@ -70,6 +93,10 @@ const { makeModule, bootstrap } = ((
           return;
         });
     });
+    process.on('SIGTERM', shutdown(0));
+    process.on('SIGINT', shutdown(0));
+    process.on('uncaughtException', shutdown(1));
+    process.on('unhandledRejection', shutdown(1));
   };
 
   return {
